@@ -1,5 +1,6 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
 import java.net.http.WebSocket;
@@ -203,6 +204,38 @@ public class App {
         WebElement iframe = driver.findElement(By.cssSelector("#main > div:nth-child(7) > iframe"));
 
         driver.switchTo().frame(iframe).findElement(By.cssSelector("#topnav > div > div.w3-bar.w3-left > a:nth-child(5)")).click();
+
+        //Handle drop down select in Selenium WebDriver
+        driver.get("https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_select");
+        //since the dropdown is located in the iframe, we have to switch to the iframe first before selecting the dropdown
+        driver.switchTo().frame(driver.findElement(By.id("iframeResult")));
+        //select the dropdown
+        WebElement selectable = driver.findElement(By.id("cars"));
+        //created a select object
+        Select select = new Select(selectable);
+        select.selectByIndex(1);
+
+
+        //Performing special actions
+        // drag and drop
+        driver.get("https://jqueryui.com/droppable/");
+        //the draggable and droppable divs sit in the iframe, so we need to switch to the iframe whenever to want to target
+        // a specific element within this iframe
+        driver.switchTo().frame(driver.findElement(By.cssSelector("#content > iframe")));
+        // identify web elements
+        WebElement draggable = driver.findElement(By.id("draggable"));
+        WebElement droppable = driver.findElement(By.id("droppable"));
+        //define actions
+        Actions dragAndDrop = new Actions(driver);
+        dragAndDrop.dragAndDrop(draggable, droppable).build().perform();
+
+        //right click
+        Actions contextClick = new Actions(driver);
+        contextClick.contextClick().build().perform();
+
+        //
+        Actions actionObj = new Actions(driver);
+        actionObj.keyDown(Keys.F1);
 
         driver.close();
 
